@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('/articles/{article}/comments', [CommentController::class,'store'])->name('comments.store')->middleware('auth');
 Route::resource('/articles', ArticleController::class)->middleware('auth');
 
 Route::get('/dashboard', function () {
