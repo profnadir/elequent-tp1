@@ -11,10 +11,13 @@ class Article extends Model
 
     //fillable
     protected $fillable = [
-        'title', 'content', 'author'
+        'title', 'content', 'user_id'
     ];
 
     //relations
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 
        
 }

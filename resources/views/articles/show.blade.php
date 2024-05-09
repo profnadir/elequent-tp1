@@ -9,7 +9,7 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                     <p>{{ $article->content }}</p>
-                    <p class="mt-4 text-gray-500">Auteur: {{ $article->author }}</p>
+                    <p class="mt-4 text-gray-500">Auteur: {{ $article->user->name }}</p>
                 </div>
             </div>
         </div>

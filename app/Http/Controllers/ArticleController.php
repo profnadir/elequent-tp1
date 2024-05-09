@@ -35,18 +35,9 @@ class ArticleController extends Controller
         $validated = $this->validate($request, [
             'title' => 'required',
             'content' => 'required',
-            'author' => 'required',
         ]);
 
-        /* $article = new Article();
-        $article->title = $request->title;
-        $article->content = $request->content;
-        $article->author = $request->author;
-        $article->save(); */
-
-        Article::create($validated);
-
-        //Article::create($request->all());
+        $request->user()->articles()->create($validated);
 
         return redirect()->route('articles.index')->with('success', 'article created successfully');
     }
@@ -64,6 +55,10 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
+        if(request()->user()->id !== $article->user_id){
+            return redirect()->route('articles.index')->with('error', 'you are not allowed to edit this article');  
+        }
+
         return view('articles.edit', compact('article'));
     }
 
@@ -72,21 +67,18 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
+        if(request()->user()->id !== $article->user_id){
+            return redirect()->route('articles.index')->with('error', 'you are not allowed to edit this article');  
+        }
+
         $validated = $this->validate($request, [
             'title' => 'required',
             'content' => 'required',
-            'author' => 'required',
         ]);
-
-        // $article->title = $request->title;
-        // $article->content = $request->content;
-        // $article->author = $request->author;
-        // $article->save();
 
         $article->update($validated);
 
         return redirect()->route('articles.index')->with('success', 'article updated successfully');
-        //return redirect()->route('articles.index')->with('error', 'article didnt updated');
     }
 
     /**
@@ -94,6 +86,10 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
+        if(request()->user()->id !== $article->user_id){
+            return redirect()->route('articles.index')->with('error', 'you are not allowed to edit this article');  
+        }
+        
         $article->delete();
         return redirect()->route('articles.index')->with('success', 'article deleted successfully');
     }

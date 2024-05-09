@@ -52,7 +52,7 @@
                                         <div class="text-sm text-gray-900">{{ $article->title }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">{{ $article->author }}</div>
+                                        <div class="text-sm text-gray-900">{{ $article->user->name }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         <a href="{{ route('articles.show', $article) }}"
