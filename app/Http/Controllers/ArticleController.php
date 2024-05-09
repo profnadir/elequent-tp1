@@ -84,8 +84,9 @@ class ArticleController extends Controller
         // $article->save();
 
         $article->update($validated);
-        
+
         return redirect()->route('articles.index')->with('success', 'article updated successfully');
+        //return redirect()->route('articles.index')->with('error', 'article didnt updated');
     }
 
     /**
