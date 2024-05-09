@@ -57,4 +57,22 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function updateCarte(Request $request)
+    {
+        $validated = $request->validate([
+            'numero' => 'required',
+            'ville' => 'required',
+        ]);
+
+        //$request->user()->carte()->create($validated);
+
+        if ($request->user()->carte) {
+            $request->user()->carte()->update($validated);
+        } else {
+            $request->user()->carte()->create($validated);
+        } 
+
+        return Redirect::route('profile.edit')->with('status', 'carte-updated');
+    }
 }
