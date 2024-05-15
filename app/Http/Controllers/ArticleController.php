@@ -13,7 +13,9 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::all();
+        $articles = Article::with('user')->get();
+        //$articles = Article::with(['user','ville'])->get();
+        //$articles = Article::all();
         // $articles = Article::get();
         // $articles = Article::orderBy('title')->take(5)->get();
         // $articles = Article::paginate(10);
