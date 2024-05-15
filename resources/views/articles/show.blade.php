@@ -7,9 +7,17 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
-                    <p>{{ $article->content }}</p>
+                <div class="p-6 sm:px-20 bg-white border-b border-gray-200 mb-4">
+                    <h2 class="text-xl font-bold">{{ $article->title }}</h2>
+                    <p class="text-gray-700 mt-2">{{ $article->content }}</p>
                     <p class="mt-4 text-gray-500">Auteur: {{ $article->user->name }}</p>
+                    <div class="mt-4">
+                        <span class="text-gray-500">Catégories:</span>
+                        @foreach ($article->categories as $category)
+                            <span
+                                class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">{{ $category->name }}</span>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>

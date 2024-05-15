@@ -10,7 +10,8 @@
                 <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                     @if ($errors->any())
                         <div class="mb-4">
-                            <div class="font-medium text-red-600">{{ __('Whoops! Quelque chose s\'est mal passé.') }}</div>
+                            <div class="font-medium text-red-600">{{ __('Whoops! Quelque chose s\'est mal passé.') }}
+                            </div>
 
                             <ul class="mt-3 list-disc list-inside text-sm text-red-600">
                                 @foreach ($errors->all() as $error)
@@ -23,19 +24,37 @@
                         @csrf
                         <div class="mb-4">
                             <label for="title" class="block text-gray-700 text-sm font-bold mb2">Titre:</label>
-                            <input type="text" name="title" id="title" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadowoutline">
+                            <input type="text" name="title" id="title"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadowoutline">
                             @error('title')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
                         <div class="mb-4">
                             <label for="content" class="block text-gray-700 text-sm font-bold mb2">Contenu:</label>
-                            <textarea name="content" id="content" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadowoutline"></textarea>
+                            <textarea name="content" id="content"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadowoutline"></textarea>
                             @error('content')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Créer l'article</button>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Catégories:</label>
+                            @foreach ($categories as $category)
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="categories[]" value="{{ $category->id }}"
+                                        class="formcheckbox h-5 w-5 text-blue-500"
+                                        {{ in_array($category->id, old('categories', [])) ? 'checked' : '' }}><span
+                                        class="ml-2 text-gray-700">{{ $category->name }}</span>
+                                </label>
+                            @endforeach
+                            @error('categories')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <button type="submit"
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Créer
+                            l'article</button>
                     </form>
                 </div>
             </div>
