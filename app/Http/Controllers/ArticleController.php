@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Categorie;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -24,7 +25,8 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        return view('articles.create');
+        $categories = Categorie::all();
+        return view('articles.create', compact('categories'));
     }
 
     /**
@@ -35,9 +37,12 @@ class ArticleController extends Controller
         $validated = $this->validate($request, [
             'title' => 'required',
             'content' => 'required',
+            'categories' => 'array',
         ]);
 
-        $request->user()->articles()->create($validated);
+        $article = $request->user()->articles()->create($validated);
+
+        $article->categories()->attach($validated['categories']);
 
         return redirect()->route('articles.index')->with('success', 'article created successfully');
     }
@@ -55,11 +60,13 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        if(request()->user()->id !== $article->user_id){
-            return redirect()->route('articles.index')->with('error', 'you are not allowed to edit this article');  
+        if (request()->user()->id !== $article->user_id) {
+            return redirect()->route('articles.index')->with('error', 'you are not allowed to edit this article');
         }
 
-        return view('articles.edit', compact('article'));
+        $categories = Categorie::all();
+
+        return view('articles.edit', compact('article', 'categories'));
     }
 
     /**
@@ -67,16 +74,25 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        if(request()->user()->id !== $article->user_id){
-            return redirect()->route('articles.index')->with('error', 'you are not allowed to edit this article');  
+        if (request()->user()->id !== $article->user_id) {
+            return redirect()->route('articles.index')->with('error', 'you are not allowed to edit this article');
         }
 
         $validated = $this->validate($request, [
             'title' => 'required',
             'content' => 'required',
+            'categories' => 'array'
         ]);
 
         $article->update($validated);
+
+        // Mise à jour des catégories de l'article
+        if (isset($validated['categories'])) {
+            $article->categories()->sync($validated['categories']);
+        } else {
+            // Si aucune catégorie n'est sélectionnée, supprime toutes les catégories existantes
+            $article->categories()->detach();
+        }
 
         return redirect()->route('articles.index')->with('success', 'article updated successfully');
     }
@@ -86,10 +102,10 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        if(request()->user()->id !== $article->user_id){
-            return redirect()->route('articles.index')->with('error', 'you are not allowed to edit this article');  
+        if (request()->user()->id !== $article->user_id) {
+            return redirect()->route('articles.index')->with('error', 'you are not allowed to edit this article');
         }
-        
+
         $article->delete();
         return redirect()->route('articles.index')->with('success', 'article deleted successfully');
     }
